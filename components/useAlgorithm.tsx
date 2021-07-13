@@ -32,7 +32,8 @@ Prop): Return => {
     if (fetch) {
       const fetchString =
         confidence !== '0'
-          ? 'http://localhost:5000/run/' +
+          ? process.env.NEXT_PUBLIC_ENV_API +
+            '/run/' +
             algorithm +
             '?data=' +
             daten +
@@ -40,7 +41,8 @@ Prop): Return => {
             support +
             '&confidence=' +
             confidence
-          : 'http://localhost:5000/run/' +
+          : process.env.NEXT_PUBLIC_ENV_API +
+            '/run/' +
             algorithm +
             '?data=' +
             daten +
