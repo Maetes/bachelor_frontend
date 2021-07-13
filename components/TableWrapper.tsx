@@ -40,46 +40,49 @@ export const TableWrapper = ({
 
   return (
     <>
-      <Table variant='simple' size='sm'>
-        {heading && <TableCaption>{heading}</TableCaption>}
-        <Thead>
-          <Tr>
-            {Object.keys(data[0]).map((e, i) => {
-              return <Th key={i}>{e}</Th>;
+      {data[0] === 'default' && 'No input yet'}
+      {data[0] !== 'default' && (
+        <Table variant='simple' size='sm'>
+          {heading && <TableCaption>{heading}</TableCaption>}
+          <Thead>
+            <Tr>
+              {Object.keys(data[0]).map((e, i) => {
+                return <Th key={i}>{e}</Th>;
+              })}
+            </Tr>
+          </Thead>
+          <Tbody>
+            {data.map((e, i) => {
+              return (
+                <Tr
+                  key={i}
+                  onClick={handleSelect(i)}
+                  _hover={{ background: 'cyan.50', cursor: 'pointer' }}
+                  _focus={{
+                    background: 'cyan.100',
+                    cursor: 'pointer',
+                    outline: 'none',
+                  }}
+                  tabIndex={1}
+                >
+                  {Object.values(e).map((f: any, g) => (
+                    <Td key={g} isNumeric>
+                      {f !== null ? f.toString() : ''}
+                    </Td>
+                  ))}
+                </Tr>
+              );
             })}
-          </Tr>
-        </Thead>
-        <Tbody>
-          {data.map((e, i) => {
-            return (
-              <Tr
-                key={i}
-                onClick={handleSelect(i)}
-                _hover={{ background: 'cyan.50', cursor: 'pointer' }}
-                _focus={{
-                  background: 'cyan.100',
-                  cursor: 'pointer',
-                  outline: 'none',
-                }}
-                tabIndex={1}
-              >
-                {Object.values(e).map((f: any, g) => (
-                  <Td key={g} isNumeric>
-                    {f !== null ? f.toString() : ''}
-                  </Td>
-                ))}
-              </Tr>
-            );
-          })}
-        </Tbody>
-        <Tfoot>
-          <Tr>
-            {Object.keys(data[0]).map((e, i) => {
-              return <Th key={i}>{e}</Th>;
-            })}
-          </Tr>
-        </Tfoot>
-      </Table>
+          </Tbody>
+          <Tfoot>
+            <Tr>
+              {Object.keys(data[0]).map((e, i) => {
+                return <Th key={i}>{e}</Th>;
+              })}
+            </Tr>
+          </Tfoot>
+        </Table>
+      )}
       {itemSelected && clickable && (
         <Modal onClose={onClose} size={'xs'} isOpen={isOpen}>
           <ModalOverlay />
