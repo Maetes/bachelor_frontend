@@ -11,13 +11,13 @@ export interface Ergebnis {
   };
   end: {
     association: {
-      asso: string;
+      asso: string | null;
       cpu: number[];
       memory: number[];
       time: number;
     };
     freqItems: {
-      freq: string;
+      freq: string | null;
       cpu: number[];
       memory: number[];
       time: number;
@@ -60,13 +60,13 @@ export const ergebnisInitialState: { ergebnis: Ergebnis } = {
     },
     end: {
       association: {
-        asso: 'Default',
+        asso: null,
         cpu: [0],
         memory: [0],
         time: 0,
       },
       freqItems: {
-        freq: 'Default',
+        freq: null,
         cpu: [0],
         memory: [0],
         time: 0,
