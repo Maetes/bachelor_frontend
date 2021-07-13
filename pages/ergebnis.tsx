@@ -22,8 +22,6 @@ const Ergebnis = () => {
     c: string;
   };
 
-  console.log(data);
-
   return (
     <Flex alignItems='center' justify='center' p='1%' direction='column'>
       <Flex w='100%' justifyContent='space-between'>
