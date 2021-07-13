@@ -60,13 +60,13 @@ export const ergebnisInitialState: { ergebnis: Ergebnis } = {
     },
     end: {
       association: {
-        asso: '""',
+        asso: 'Default',
         cpu: [0],
         memory: [0],
         time: 0,
       },
       freqItems: {
-        freq: '""',
+        freq: 'Default',
         cpu: [0],
         memory: [0],
         time: 0,
