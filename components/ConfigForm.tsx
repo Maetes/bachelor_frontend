@@ -20,6 +20,8 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useAlgorithm } from '../components/useAlgorithm';
 import { useStateGlobal } from '../stateManagement/useStateGlobal';
+import { useCheckrunning } from './useCheckrunning';
+import { useResult } from './useResult';
 
 type asd<T> = keyof T;
 
@@ -38,54 +40,99 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
   const [datenset, setDatenset] = useState<string>('');
   const [support, setSupport] = useState('0.01');
   const [confidence, setConfidence] = useState('0');
+  const [startTracker, setStartTracker] = useState(false);
   const toast = useToast();
 
   const router = useRouter();
   const [{ ergebnisState }, setStateGlobal] = useStateGlobal();
 
-  const handleSelectChange =
-    (kind: string) => (e: React.ChangeEvent<HTMLSelectElement>) => {
-      if (kind === 'data') {
-        setDatenset(e.target.value);
-      } else if (kind === 'algo') {
-        setAlgorithm(e.target.value as asd<typeof algos>);
-      }
-    };
-
-  const [{ data, isError, isLoading }, setFetch] = useAlgorithm({
+  let [{ data: jobid }, setFetch] = useAlgorithm({
     daten: datenset,
     algorithm: algos[algorithm],
     support: support,
     confidence: confidence,
     // cache: progress ? false : true,
   });
+  const [{ result: data, isError }, setGet, setIsError] = useResult({ jobid });
+  const [{ isLoading }, setTrack] = useCheckrunning({ jobid });
+
+  const handleSelectChange =
+    (kind: string) => (e: React.ChangeEvent<HTMLSelectElement>) => {
+      if (kind === 'data') {
+        setDatenset(e.target.value);
+        jobid = '';
+      } else if (kind === 'algo') {
+        setAlgorithm(e.target.value as asd<typeof algos>);
+        jobid = '';
+      }
+    };
+
+  const handleInputChange = (kind: string) => (e: string) => {
+    if (kind === 'support') {
+      setSupport(e);
+      jobid = '';
+    } else if (kind === 'confidence') {
+      setConfidence(e);
+      jobid = '';
+    }
+  };
 
   const handleSubmit = () => {
     setFetch(true);
+    setTrack(true);
   };
 
   useEffect(() => {
-    setFetch(false);
-    if (typeof data === 'string' && isLoading === false) {
-      console.log('ok');
+    if (jobid) {
+      setFetch(false);
+    }
+  }, [jobid, setFetch]);
+
+  useEffect(() => {
+    if (!isLoading && jobid && !isError.status && startTracker) {
+      setGet(true);
+      setStartTracker(false);
+    }
+  }, [isError.status, isLoading, jobid, setGet, startTracker]);
+
+  useEffect(() => {
+    if (data || isError.status) {
+      setGet(false);
+    }
+  }, [data, isError.status, setGet]);
+
+  useEffect(() => {
+    if (isLoading) {
+      setStartTracker(true);
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (data) {
+      setStateGlobal({ type: 'CREATE', payload: data });
+      setGet(false);
+      setTrack(false);
+    }
+  }, [data, setGet, setStateGlobal, setTrack]);
+
+  useEffect(() => {
+    if (isError.status) {
       toast({
-        title: `${data}`,
+        title: `${isError.message}`,
         duration: 3000,
         position: 'top',
         isClosable: true,
         status: 'error',
       });
-    } else {
-      setStateGlobal({ type: 'CREATE', payload: data });
+      setIsError({ status: false, message: '' });
     }
-  }, [data, setFetch, setStateGlobal, toast, isLoading]);
+  }, [isError, setIsError, toast]);
 
   return (
     <chakra.form
       onSubmit={(e) => {
         e.preventDefault();
         handleSubmit();
-        setFetch(true);
       }}
       {...props}
     >
@@ -120,7 +167,7 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
             max={1}
             min={0.01}
             step={0.01}
-            onChange={(e) => setSupport(e)}
+            onChange={handleInputChange('support')}
             value={support}
           >
             <NumberInputField placeholder='Setze relativen Support' />
@@ -137,7 +184,7 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
             min={0}
             step={0.01}
             value={confidence}
-            onChange={(e) => setConfidence(e)}
+            onChange={handleInputChange('confidence')}
           >
             <NumberInputField placeholder='Setze Konfidenz' />
             <NumberInputStepper>
@@ -147,7 +194,7 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
           </NumberInput>
           <FormHelperText>Optional</FormHelperText>
         </FormControl>
-        {(!data || typeof data === 'string') && (
+        {(!data || isError.status) && (
           <Button
             type='submit'
             colorScheme='cyan'
@@ -166,7 +213,7 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
             Auswerten
           </Button>
         )}
-        {data && typeof data !== 'string' && (
+        {data && !isError.status && (
           <Button
             type='button'
             colorScheme='cyan'

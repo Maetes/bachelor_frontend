@@ -88,25 +88,33 @@ const Ergebnis = () => {
 
       {data.end.freqItems.freq && (
         <Boxing heading={'Frequent Patterns'}>
-          <TableWrapper
-            data={
-              typeof data.end.freqItems.freq === 'string'
-                ? JSON.parse(data.end.freqItems.freq)
-                : data.end.freqItems.freq
-            }
-          />
+          {data.end.freqItems.freq === '[]' ? (
+            <div>Keine FrequentPatterns gefunden!</div>
+          ) : (
+            <TableWrapper
+              data={
+                typeof data.end.freqItems.freq === 'string'
+                  ? JSON.parse(data.end.freqItems.freq)
+                  : data.end.freqItems.freq
+              }
+            />
+          )}
         </Boxing>
       )}
 
       {data.end.association && (
         <Boxing heading={'Association rules'}>
-          <TableWrapper
-            data={
-              typeof data.end.association.asso === 'string'
-                ? JSON.parse(data.end.association.asso)
-                : data.end.association.asso
-            }
-          />
+          {data.end.association.asso === '[]' ? (
+            <div>Keine Assoziationsregeln gefunden!</div>
+          ) : (
+            <TableWrapper
+              data={
+                typeof data.end.association.asso === 'string'
+                  ? JSON.parse(data.end.association.asso)
+                  : data.end.association.asso
+              }
+            />
+          )}
         </Boxing>
       )}
     </Flex>

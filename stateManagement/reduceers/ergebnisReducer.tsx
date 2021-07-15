@@ -11,13 +11,13 @@ export interface Ergebnis {
   };
   end: {
     association: {
-      asso: string | string[];
+      asso: string[] | string;
       cpu: number[];
       memory: number[];
       time: number;
     };
     freqItems: {
-      freq: string | string[];
+      freq: string[] | string;
       cpu: number[];
       memory: number[];
       time: number;
