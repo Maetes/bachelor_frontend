@@ -85,6 +85,7 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
   useEffect(() => {
     if (jobid) {
       setFetch(false);
+      console.log(jobid);
     }
   }, [jobid, setFetch]);
 
