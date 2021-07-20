@@ -25,7 +25,14 @@ import { useResult } from './useResult';
 
 type asd<T> = keyof T;
 
-const daten = ['klein', 'test', 'Aldi', 'Rewe'];
+const daten = [
+  'klein',
+  'test',
+  'Aldi',
+  'Rewe',
+  'Aldi_eineFiliale',
+  'Rewe_eineFiliale',
+];
 
 const algos = {
   Apriori: 'apriori',
@@ -38,9 +45,10 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
     '' as 'Apriori'
   );
   const [datenset, setDatenset] = useState<string>('');
-  const [support, setSupport] = useState('0.01');
+  const [support, setSupport] = useState('0.001');
   const [confidence, setConfidence] = useState('0');
   const [startTracker, setStartTracker] = useState(false);
+  const [changeButton, setChangeButton] = useState(false);
   const toast = useToast();
 
   const router = useRouter();
@@ -80,6 +88,7 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
   const handleSubmit = () => {
     setFetch(true);
     setTrack(true);
+    setChangeButton(true);
   };
 
   useEffect(() => {
@@ -113,6 +122,7 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
       setStateGlobal({ type: 'CREATE', payload: data });
       setGet(false);
       setTrack(false);
+      setChangeButton(false);
     }
   }, [data, setGet, setStateGlobal, setTrack]);
 
@@ -166,7 +176,7 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
           <FormLabel>Support</FormLabel>
           <NumberInput
             max={1}
-            min={0.01}
+            min={0.001}
             step={0.01}
             onChange={handleInputChange('support')}
             value={support}
@@ -195,14 +205,14 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
           </NumberInput>
           <FormHelperText>Optional</FormHelperText>
         </FormControl>
-        {(!data || isError.status) && (
+        {ergebnisState.ergebnis.start.freqItems.cpu[0] === 0 && (
           <Button
             type='submit'
             colorScheme='cyan'
             size='lg'
             fontSize='md'
             color='white'
-            isLoading={isLoading}
+            isLoading={changeButton}
             isDisabled={
               algorithm === ('' as 'Apriori')
                 ? true
@@ -214,28 +224,30 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
             Auswerten
           </Button>
         )}
-        {data && !isError.status && (
-          <Button
-            type='button'
-            colorScheme='cyan'
-            color='white'
-            size='lg'
-            fontSize='md'
-            onClick={() => {
-              router.push({
-                pathname: '/ergebnis',
-                query: {
-                  d: datenset,
-                  a: algos[algorithm],
-                  s: support,
-                  ...(confidence !== '0' && { c: confidence }),
-                },
-              });
-            }}
-          >
-            Ergebnis
-          </Button>
-        )}
+        {ergebnisState.ergebnis.start.freqItems.cpu[0] !== 0 &&
+          !isError.status && (
+            <Button
+              type='button'
+              colorScheme='cyan'
+              color='white'
+              size='lg'
+              fontSize='md'
+              isLoading={changeButton}
+              onClick={() => {
+                router.push({
+                  pathname: '/ergebnis',
+                  query: {
+                    d: datenset,
+                    a: algos[algorithm],
+                    s: support,
+                    ...(confidence !== '0' && { c: confidence }),
+                  },
+                });
+              }}
+            >
+              Ergebnis
+            </Button>
+          )}
       </Stack>
     </chakra.form>
   );

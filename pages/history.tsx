@@ -51,7 +51,7 @@ const History = () => {
           time: JSON.parse(receivedData.Association_Ende_Zeit),
         },
         freqItems: {
-          freq: JSON.parse(receivedData.FrequentItems_Ende_Frequent_items),
+          freq: receivedData.FrequentItems_Ende_Frequent_items,
           cpu: JSON.parse(receivedData.FrequentItems_Ende_CPU),
           memory: JSON.parse(receivedData.FrequentItems_Ende_Memory),
           time: JSON.parse(receivedData.FrequentItems_Ende_Zeit),
@@ -64,6 +64,7 @@ const History = () => {
   useEffect(() => {
     if (selected) {
       const returner = buildReturner(data[receivedData]);
+
       setStateGlobal({ type: 'CREATE', payload: returner });
 
       router.push({
@@ -105,6 +106,7 @@ const History = () => {
           colorScheme='cyan'
           variant='outline'
           onClick={() => {
+            setStateGlobal({ type: 'DELETE', payload: '' });
             router.push('/');
           }}
         >

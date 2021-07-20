@@ -30,6 +30,7 @@ const Ergebnis = () => {
             colorScheme='cyan'
             variant='outline'
             onClick={() => {
+              setStateGlobal({ type: 'DELETE', payload: '' });
               router.replace('/');
             }}
           >
@@ -88,7 +89,9 @@ const Ergebnis = () => {
 
       {data.end.freqItems.freq && (
         <Boxing heading={'Frequent Patterns'}>
-          {data.end.freqItems.freq === '[]' ? (
+          {data.end.freqItems.freq === null ||
+          (Array.isArray(data.end.freqItems.freq) &&
+            !data.end.freqItems.freq.length) ? (
             <div>Keine FrequentPatterns gefunden!</div>
           ) : (
             <TableWrapper
@@ -101,10 +104,11 @@ const Ergebnis = () => {
           )}
         </Boxing>
       )}
-
       {data.end.association && (
         <Boxing heading={'Association rules'}>
-          {data.end.association.asso === '[]' ? (
+          {data.end.association.asso === null ||
+          (Array.isArray(data.end.association.asso) &&
+            !data.end.association.asso.length) ? (
             <div>Keine Assoziationsregeln gefunden!</div>
           ) : (
             <TableWrapper
