@@ -28,8 +28,8 @@ type asd<T> = keyof T;
 const daten = [
   'klein',
   'test',
-  'Aldi',
-  'Rewe',
+  'Aldi_Deutschland',
+  'Rewe_Deutschland',
   'Aldi_eineFiliale',
   'Rewe_eineFiliale',
 ];
