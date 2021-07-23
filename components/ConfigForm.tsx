@@ -136,6 +136,7 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
         status: 'error',
       });
       setIsError({ status: false, message: '' });
+      setChangeButton(false);
     }
   }, [isError, setIsError, toast]);
 
