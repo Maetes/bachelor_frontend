@@ -155,6 +155,7 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
             placeholder='Wähle Algorithmus'
             value={algorithm}
             onChange={handleSelectChange('algo')}
+            disabled={changeButton}
           >
             {Object.keys(algos).map((e, i) => {
               return <option key={i}>{e}</option>;
@@ -167,6 +168,7 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
             placeholder='Wähle Datenset'
             value={datenset}
             onChange={handleSelectChange('data')}
+            disabled={changeButton}
           >
             {daten.map((e, i) => (
               <option key={i}>{e}</option>
@@ -181,6 +183,7 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
             step={0.01}
             onChange={handleInputChange('support')}
             value={support}
+            disabled={changeButton}
           >
             <NumberInputField placeholder='Setze relativen Support' />
             <NumberInputStepper>
@@ -197,6 +200,7 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
             step={0.01}
             value={confidence}
             onChange={handleInputChange('confidence')}
+            disabled={changeButton}
           >
             <NumberInputField placeholder='Setze Konfidenz' />
             <NumberInputStepper>
