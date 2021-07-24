@@ -26,10 +26,8 @@ import { useResult } from './useResult';
 type asd<T> = keyof T;
 
 const daten = [
-  'klein',
-  'test',
-  'Aldi_Deutschland',
-  'Rewe_Deutschland',
+  'Beispieldatenset',
+  'Rewe_Ausgangsbasis',
   'Aldi_eineFiliale',
   'Rewe_eineFiliale',
 ];
@@ -86,6 +84,7 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
   };
 
   const handleSubmit = () => {
+    setStateGlobal({ type: 'DELETE', payload: '' });
     setFetch(true);
     setTrack(true);
     setChangeButton(true);
