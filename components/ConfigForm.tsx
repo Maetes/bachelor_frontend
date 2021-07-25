@@ -19,6 +19,7 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useAlgorithm } from '../components/useAlgorithm';
+import { ergebnisInitialState } from '../stateManagement/reduceers/ergebnisReducer';
 import { useStateGlobal } from '../stateManagement/useStateGlobal';
 import { useCheckrunning } from './useCheckrunning';
 import { useResult } from './useResult';
@@ -28,8 +29,10 @@ type asd<T> = keyof T;
 const daten = [
   'Beispieldatenset',
   'Rewe_Ausgangsbasis',
-  'Aldi_eineFiliale',
-  'Rewe_eineFiliale',
+  'Rewe_Ausgangsbasis',
+  'Aldi_Ausgangsbasis',
+  'Aldi_Transaktionen',
+  'Rewe_Transaktionen',
 ];
 
 const algos = {
@@ -45,9 +48,8 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
   const [datenset, setDatenset] = useState<string>('');
   const [support, setSupport] = useState('0.001');
   const [confidence, setConfidence] = useState('0');
-  const [startTracker, setStartTracker] = useState(false);
   const [changeButton, setChangeButton] = useState(false);
-  const [toggleSubmit, setToggleSubmit] = useState(false);
+  const [loadingState, setLoadingState] = useState(true);
   const toast = useToast();
 
   const router = useRouter();
@@ -85,47 +87,33 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
   };
 
   const handleSubmit = () => {
-    setStateGlobal({ type: 'DELETE', payload: '' });
+    setLoadingState(true);
     setFetch(true);
-    setTrack(true);
     setChangeButton(true);
-    setToggleSubmit(!toggleSubmit);
   };
 
   useEffect(() => {
     if (jobid) {
       setFetch(false);
-      console.log(jobid);
+      setTrack(true);
     }
-  }, [jobid, setFetch]);
+  }, [jobid, setFetch, setTrack]);
 
   useEffect(() => {
-    if (!isLoading && jobid && !isError.status && startTracker) {
+    if (!isLoading && jobid && !isError.status) {
+      console.log(isLoading, jobid);
       setGet(true);
-      setStartTracker(false);
-    }
-  }, [isError.status, isLoading, jobid, setGet, startTracker]);
-
-  useEffect(() => {
-    if (data || isError.status) {
-      setGet(false);
-    }
-  }, [data, isError.status, setGet]);
-
-  useEffect(() => {
-    if (isLoading) {
-      setStartTracker(true);
-    }
-  }, [isLoading]);
-
-  useEffect(() => {
-    if (data) {
-      setStateGlobal({ type: 'CREATE', payload: data });
-      setGet(false);
       setTrack(false);
-      setChangeButton(false);
     }
-  }, [data, setGet, setStateGlobal, setTrack]);
+  }, [isError.status, isLoading, jobid, setGet, setTrack]);
+
+  useEffect(() => {
+    if (data && !isError.status) {
+      setGet(false);
+      setStateGlobal({ type: 'CREATE', payload: data });
+      setLoadingState(false);
+    }
+  }, [data, isError.status, setGet, setStateGlobal]);
 
   useEffect(() => {
     if (isError.status) {
@@ -211,49 +199,41 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
           </NumberInput>
           <FormHelperText>Optional</FormHelperText>
         </FormControl>
-        {ergebnisState.ergebnis.start.freqItems.cpu[0] === 0 && !toggleSubmit && (
+        {!changeButton && (
           <Button
             type='submit'
             colorScheme='cyan'
             size='lg'
             fontSize='md'
             color='white'
-            isLoading={changeButton}
-            isDisabled={
-              algorithm === ('' as 'Apriori')
-                ? true
-                : datenset === ''
-                ? true
-                : false
-            }
+            isDisabled={changeButton}
           >
             Auswerten
           </Button>
         )}
-        {ergebnisState.ergebnis.start.freqItems.cpu[0] !== 0 &&
-          !isError.status && (
-            <Button
-              type='button'
-              colorScheme='cyan'
-              color='white'
-              size='lg'
-              fontSize='md'
-              isLoading={changeButton}
-              onClick={() => {
-                router.push({
-                  pathname: '/ergebnis',
-                  query: {
-                    d: datenset,
-                    a: algos[algorithm],
-                    s: support,
-                    ...(confidence !== '0' && { c: confidence }),
-                  },
-                });
-              }}
-            >
-              Ergebnis
-            </Button>
-          )}
+        {changeButton && !isError.status && (
+          <Button
+            type='button'
+            colorScheme='cyan'
+            color='white'
+            size='lg'
+            fontSize='md'
+            isLoading={loadingState}
+            onClick={() => {
+              router.push({
+                pathname: '/ergebnis',
+                query: {
+                  d: datenset,
+                  a: algos[algorithm],
+                  s: support,
+                  ...(confidence !== '0' && { c: confidence }),
+                },
+              });
+            }}
+          >
+            Ergebnis
+          </Button>
+        )}
       </Stack>
     </chakra.form>
   );

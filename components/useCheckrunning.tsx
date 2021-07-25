@@ -7,7 +7,7 @@ const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 type Return = [{ isLoading: boolean }, Dispatch<SetStateAction<boolean>>];
 
 export const useCheckrunning = ({ jobid }: { jobid: string }): Return => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [track, setTrack] = useState(false);
   const [startTracker, setStartTracker] = useState(false);
   const { data, error } = useSWR(
