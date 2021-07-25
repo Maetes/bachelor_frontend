@@ -47,6 +47,7 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
   const [confidence, setConfidence] = useState('0');
   const [startTracker, setStartTracker] = useState(false);
   const [changeButton, setChangeButton] = useState(false);
+  const [toggleSubmit, setToggleSubmit] = useState(false);
   const toast = useToast();
 
   const router = useRouter();
@@ -88,6 +89,7 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
     setFetch(true);
     setTrack(true);
     setChangeButton(true);
+    setToggleSubmit(!toggleSubmit);
   };
 
   useEffect(() => {
@@ -209,7 +211,7 @@ export const ConfigForm = (props: HTMLChakraProps<'form'>) => {
           </NumberInput>
           <FormHelperText>Optional</FormHelperText>
         </FormControl>
-        {ergebnisState.ergebnis.start.freqItems.cpu[0] === 0 && (
+        {ergebnisState.ergebnis.start.freqItems.cpu[0] === 0 && !toggleSubmit && (
           <Button
             type='submit'
             colorScheme='cyan'
