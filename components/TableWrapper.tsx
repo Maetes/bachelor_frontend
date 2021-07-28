@@ -50,11 +50,6 @@ export const TableWrapper = ({
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const handleSelect = (i: number) => (e: any) => {
-    bounceBackData(i);
-    onOpen();
-  };
-
   const stringer = (row: string) => (e: any) =>
     Array.isArray(e[row]) && e[row].length ? e[row].join() : e[row];
 
@@ -99,6 +94,11 @@ export const TableWrapper = ({
     },
     usePagination
   );
+
+  const handleSelect = (i: number) => (e: any) => {
+    bounceBackData(i + pageIndex * pageSize);
+    onOpen();
+  };
 
   return (
     <>
