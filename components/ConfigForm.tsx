@@ -33,6 +33,8 @@ const daten = [
   'Aldi_Ausgangsbasis',
   'Aldi_Transaktionen',
   'Rewe_Transaktionen',
+  'Aldi_Warenkorb',
+  'Rewe_Warenkorb',
 ];
 
 const algos = {
