@@ -8,7 +8,7 @@ export const useHistory = () => {
     process.env.NEXT_PUBLIC_ENV_API + '/history',
     fetcher,
     {
-      revalidateOnFocus: false,
+      revalidateOnFocus: true,
       revalidateOnMount: true,
       revalidateOnReconnect: true,
       refreshWhenOffline: false,
