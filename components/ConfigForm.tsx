@@ -35,6 +35,8 @@ const daten = [
   'Rewe_Transaktionen',
   'Aldi_Warenkorb',
   'Rewe_Warenkorb',
+  'Aldi_häufigeItemsets',
+  'Rewe_häufigeItemsets',
 ];
 
 const algos = {
