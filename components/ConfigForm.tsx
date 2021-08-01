@@ -37,6 +37,8 @@ const daten = [
   'Rewe_Warenkorb',
   'Aldi_häufigeItemsets',
   'Rewe_häufigeItemsets',
+  'Aldi_Items',
+  'Rewe_Items',
 ];
 
 const algos = {

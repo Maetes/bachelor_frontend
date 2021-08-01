@@ -66,7 +66,7 @@ export const TableWrapper = ({
   );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const data2 = React.useMemo(() => data, []);
+  const data2 = React.useMemo(() => data, [data]);
 
   const {
     getTableProps,
