@@ -60,20 +60,20 @@ const Ergebnis = () => {
       />
       {data.end.freqItems.freq && (
         <Boxing
-          heading={'Ausgangswerte FreqItems'}
+          heading={'Ausgangswerte Häufige Itemsets'}
           elements={data.start.freqItems}
         />
       )}
       {data.end.association && (
         <Boxing
-          heading={'Ausgangswerte Association'}
+          heading={'Ausgangswerte Assoziationsregeln'}
           elements={data.start.association}
         />
       )}
 
       {data.end.freqItems.freq && (
         <Boxing
-          heading={'Messwerte FreqItems'}
+          heading={'Messwerte Häufige Itemsets'}
           elements={data.end.freqItems}
           dont={'freq'}
         />
@@ -81,14 +81,14 @@ const Ergebnis = () => {
 
       {data.end.association && (
         <Boxing
-          heading={'Messwerte Association'}
+          heading={'Messwerte Assoziationsregeln'}
           elements={data.end.association}
           dont={'asso'}
         />
       )}
 
       {data.end.freqItems.freq && (
-        <Boxing heading={'Frequent Patterns'}>
+        <Boxing heading={'Häufige Itemsets'}>
           {data.end.freqItems.freq === null ||
           (Array.isArray(data.end.freqItems.freq) &&
             !data.end.freqItems.freq.length) ? (
@@ -105,7 +105,7 @@ const Ergebnis = () => {
         </Boxing>
       )}
       {data.end.association && (
-        <Boxing heading={'Association rules'}>
+        <Boxing heading={'Assoziationsregeln'}>
           {data.end.association.asso === null ||
           (Array.isArray(data.end.association.asso) &&
             !data.end.association.asso.length) ? (
