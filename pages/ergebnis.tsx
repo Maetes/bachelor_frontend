@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Link } from '@chakra-ui/react';
+import { Box, Button, Flex, Link, Text } from '@chakra-ui/react';
 import Boxing from '../components/Boxing';
 import { useRouter } from 'next/router';
 import { TableWrapper } from '../components/TableWrapper';
@@ -50,43 +50,40 @@ const Ergebnis = () => {
         </Box>
       </Flex>
       <Boxing
-        heading={'InputDaten'}
+        heading={'Eingabe Daten'}
         elements={{
           Algorithmus: a,
           Datenset: d,
-          Support: s,
-          ...(c && { Konfidenz: c }),
+          Support: parseFloat(s) * 100 + '%',
+          ...(c && { Konfidenz: parseFloat(c) * 100 + '%' }),
         }}
       />
       {data.end.freqItems.freq && (
         <Boxing
-          heading={'Ausgangswerte Häufige Itemsets'}
+          heading={'Ausgangswerte Häufige Itemsets*'}
           elements={data.start.freqItems}
         />
       )}
       {data.end.association && (
         <Boxing
-          heading={'Ausgangswerte Assoziationsregeln'}
+          heading={'Ausgangswerte Assoziationsregeln*'}
           elements={data.start.association}
         />
       )}
-
       {data.end.freqItems.freq && (
         <Boxing
-          heading={'Messwerte Häufige Itemsets'}
+          heading={'Messwerte Häufige Itemsets*'}
           elements={data.end.freqItems}
           dont={'freq'}
         />
       )}
-
       {data.end.association && (
         <Boxing
-          heading={'Messwerte Assoziationsregeln'}
+          heading={'Messwerte Assoziationsregeln*'}
           elements={data.end.association}
           dont={'asso'}
         />
       )}
-
       {data.end.freqItems.freq && (
         <Boxing heading={'Häufige Itemsets'}>
           {data.end.freqItems.freq === null ||
@@ -121,6 +118,9 @@ const Ergebnis = () => {
           )}
         </Boxing>
       )}
+      <Text fontSize='xs' sx={{ alignSelf: 'flex-start' }}>
+        * cpu / memory in Prozent | time in Sekunden
+      </Text>
     </Flex>
   );
 };

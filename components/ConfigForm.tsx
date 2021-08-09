@@ -28,9 +28,8 @@ type asd<T> = keyof T;
 
 const daten = [
   'Beispieldatenset',
-  'Rewe_Ausgangsbasis',
-  'Rewe_Ausgangsbasis',
   'Aldi_Ausgangsbasis',
+  'Rewe_Ausgangsbasis',
   'Aldi_Transaktionen',
   'Rewe_Transaktionen',
   'Aldi_Warenkorb',
