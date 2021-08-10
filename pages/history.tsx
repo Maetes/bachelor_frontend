@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Boxing from '../components/Boxing';
 import { TableWrapper } from '../components/TableWrapper';
 import { useHistory } from '../components/useHistory';
+import { useItem } from '../components/useItem';
 import { useStateGlobal } from '../stateManagement/useStateGlobal';
 
 interface BouncedBackData {}
@@ -29,6 +30,12 @@ const History = () => {
   const [{}, setStateGlobal] = useStateGlobal();
   const [tableData, setTableData] = useState<TableData[]>([]);
   const router = useRouter();
+  const [idArray, setIdArray] = useState<number[]>([]);
+
+  let [
+    { data: rsl, isLoading: isLoadingItem, isError: isErrorItem },
+    setFetch,
+  ] = useItem();
 
   // dieser Hook aktualisert das Builded Object, wenn sich die Daten die erhalten werden Ändern! Das wars!
   const buildReturner = useCallback((receivedData) => {
@@ -63,8 +70,15 @@ const History = () => {
   // Dieses Object löst den Push auf die Ergebnisseite aus, wenn sich die Daten ändern.
   useEffect(() => {
     if (selected) {
-      const returner = buildReturner(data[receivedData]);
+      const idOfItem = idArray[receivedData];
+      setFetch(idOfItem);
+    }
+  }, [idArray, receivedData, selected, setFetch]);
 
+  useEffect(() => {
+    if (rsl && !isLoadingItem) {
+      setFetch(0);
+      const returner = buildReturner(rsl);
       setStateGlobal({ type: 'CREATE', payload: returner });
 
       router.push({
@@ -79,22 +93,33 @@ const History = () => {
         },
       });
     }
-  }, [buildReturner, data, receivedData, router, selected, setStateGlobal]);
+  }, [
+    buildReturner,
+    data,
+    isLoadingItem,
+    receivedData,
+    router,
+    rsl,
+    setFetch,
+    setStateGlobal,
+  ]);
 
   //Damit die Tabelle der History nicht zu groß wird werden nur wichtige Daten angezeigt
   useEffect(() => {
     if (data) {
       // const redu = (acc, cur) => {if(cur.Algorithm)}
       const tdata: TableData[] = [];
-      data.map((e, i) =>
+
+      data.map((e, i) => {
+        setIdArray((idArray) => [...idArray, e.id as unknown as number]);
         tdata.push({
           Zeitstempel: e.Zeitstempel,
           Algorithmus: e.Algorithmus,
           Dataset: e.Dataset,
           Support: e.Support,
           Confidence: e.Confidence,
-        })
-      );
+        });
+      });
       setTableData(tdata);
     }
   }, [data]);
@@ -122,7 +147,7 @@ const History = () => {
             clickable
           />
         ) : (
-          <></>
+          <>Loading...</>
         )}
       </Boxing>
     </Flex>
