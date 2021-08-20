@@ -34,6 +34,7 @@ export const ergebnisReducer = (state: stateType, action: any) => {
   switch (type) {
     case 'CREATE':
       return {
+        ...state,
         ergebnis: payload,
       };
     case 'DELETE':

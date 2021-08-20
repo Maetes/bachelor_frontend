@@ -32,7 +32,7 @@ import {
   ChevronRightIcon,
   ChevronLeftIcon,
 } from '@chakra-ui/icons';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTable, usePagination } from 'react-table';
 
 export const TableWrapper = ({
@@ -41,12 +41,18 @@ export const TableWrapper = ({
   itemSelected = () => null,
   bounceBackData = () => null,
   clickable = false,
+  loadingItem = false,
+  uxPagesetter = () => null,
+  uxPage = 0,
 }: {
   data: any[];
   heading?: string | null;
   itemSelected?: React.Dispatch<React.SetStateAction<boolean>>;
   bounceBackData?: React.Dispatch<React.SetStateAction<any>>;
   clickable?: boolean;
+  loadingItem?: boolean;
+  uxPagesetter?: React.Dispatch<React.SetStateAction<any>>;
+  uxPage?: number;
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -90,7 +96,7 @@ export const TableWrapper = ({
     {
       columns,
       data: data2,
-      initialState: { pageIndex: 0, pageSize: 20 },
+      initialState: { pageIndex: uxPage, pageSize: 20 },
     },
     usePagination
   );
@@ -99,6 +105,10 @@ export const TableWrapper = ({
     bounceBackData(i + pageIndex * pageSize);
     onOpen();
   };
+
+  useEffect(() => {
+    uxPagesetter({ type: 'HISTPAGE', payload: pageIndex });
+  }, [pageIndex, uxPagesetter]);
 
   return (
     <>
@@ -225,6 +235,7 @@ export const TableWrapper = ({
                   gotoPage(page);
                 }}
                 defaultValue={pageIndex + 1}
+                value={pageIndex + 1}
               >
                 <NumberInputField />
                 <NumberInputStepper>
@@ -256,7 +267,13 @@ export const TableWrapper = ({
         </>
       )}
       {itemSelected && clickable && (
-        <Modal onClose={onClose} size={'xs'} isOpen={isOpen}>
+        <Modal
+          onClose={onClose}
+          size={'xs'}
+          isOpen={isOpen}
+          closeOnEsc={!loadingItem}
+          closeOnOverlayClick={!loadingItem}
+        >
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>Auswahl anzeigen?</ModalHeader>
@@ -269,6 +286,8 @@ export const TableWrapper = ({
                 colorScheme='cyan'
                 mr={3}
                 onClick={() => itemSelected(true)}
+                disabled={loadingItem}
+                isLoading={loadingItem}
               >
                 Ok
               </Button>
@@ -277,6 +296,7 @@ export const TableWrapper = ({
                   onClose();
                   itemSelected(false);
                 }}
+                disabled={loadingItem}
               >
                 Close
               </Button>

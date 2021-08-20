@@ -1,12 +1,13 @@
 import React, { createContext, useContext, useReducer } from 'react';
 import { InitialStateType } from './mainReducer';
 import { Ergebnis } from './reduceers/ergebnisReducer';
+import { UXstate } from './reduceers/uxReducer';
 
 interface State {
   reducer: (
-    { ergebnisState }: InitialStateType,
+    { ergebnisState, ux }: InitialStateType,
     action: any
-  ) => { ergebnisState: { ergebnis: Ergebnis } };
+  ) => { ergebnisState: { ergebnis: Ergebnis }; ux: UXstate };
   initialState: InitialStateType;
   children: any;
 }

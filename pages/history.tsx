@@ -27,7 +27,12 @@ const History = () => {
   }: { data: HistData; isLoading: boolean; isError: boolean } = useHistory();
   const [selected, setSelected] = useState(false);
   const [receivedData, setReceivedData] = useState<number>(0);
-  const [{}, setStateGlobal] = useStateGlobal();
+  const [
+    {
+      ux: { historyPage },
+    },
+    setStateGlobal,
+  ] = useStateGlobal();
   const [tableData, setTableData] = useState<TableData[]>([]);
   const router = useRouter();
   const [idArray, setIdArray] = useState<number[]>([]);
@@ -145,6 +150,9 @@ const History = () => {
             itemSelected={setSelected}
             bounceBackData={setReceivedData}
             clickable
+            loadingItem={isLoadingItem}
+            uxPagesetter={setStateGlobal}
+            uxPage={historyPage}
           />
         ) : (
           <>Loading...</>
