@@ -25,8 +25,18 @@ const Index = () => {
       alignItems='center'
       justify='center'
       direction='column'
+      p='1%'
     >
-      <Flex w='100%' mb='auto' p='1rem' justifyContent='flex-end'>
+      <Flex w='100%' justifyContent='space-between'>
+        <Button
+          colorScheme='cyan'
+          variant='outline'
+          onClick={() => {
+            router.push('/datasets');
+          }}
+        >
+          Datensets
+        </Button>
         <Button
           colorScheme='cyan'
           variant='outline'

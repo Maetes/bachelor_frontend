@@ -44,6 +44,8 @@ export const TableWrapper = ({
   loadingItem = false,
   uxPagesetter = () => null,
   uxPage = 0,
+  headerText = '',
+  bodyText = '',
 }: {
   data: any[];
   heading?: string | null;
@@ -53,6 +55,8 @@ export const TableWrapper = ({
   loadingItem?: boolean;
   uxPagesetter?: React.Dispatch<React.SetStateAction<any>>;
   uxPage?: number;
+  headerText?: string;
+  bodyText?: string;
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -276,11 +280,9 @@ export const TableWrapper = ({
         >
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Auswahl anzeigen?</ModalHeader>
+            <ModalHeader>{headerText}</ModalHeader>
             <ModalCloseButton />
-            <ModalBody>
-              Möchten Sie die aktuell ausgewählten Itemwerte anzeigen?
-            </ModalBody>
+            <ModalBody>{bodyText}</ModalBody>
             <ModalFooter>
               <Button
                 colorScheme='cyan'

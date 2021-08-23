@@ -153,6 +153,10 @@ const History = () => {
             loadingItem={isLoadingItem}
             uxPagesetter={setStateGlobal}
             uxPage={historyPage}
+            headerText={'Auswahl anzeigen'}
+            bodyText={
+              'Möchten Sie die aktuell ausgewählten Itemwerte anzeigen?'
+            }
           />
         ) : (
           <>Loading...</>
